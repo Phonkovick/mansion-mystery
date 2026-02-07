@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тайна старого особняка - Версия 3.2</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="menu-screen" class="menu-screen">
+        <div class="menu-content">
+            <div class="menu-title">ТАЙНА СТАРОГО ОСОБНЯКА</div>
+            <div class="menu-choices">
+                <button class="menu-btn" onclick="startNewGame()">НОВАЯ ИГРА</button>
+                <button class="menu-btn" onclick="loadGameFromMenu()">ЗАГРУЗИТЬ ИГРУ</button>
+                <button class="menu-btn" onclick="showEndingsList()">НАЙДЕННЫЕ КОНЦОВКИ</button>
+                <button class="menu-btn" onclick="showInstructions()">ПРАВИЛА ИГРЫ</button>
+                <button class="menu-btn" onclick="showAbout()">ОБ ИГРЕ</button>
+            </div>
+            <div style="text-align: center; color: #8f8; font-size: 0.9em; margin-top: 30px;">
+                Версия 3.2
+            </div>
+        </div>
+    </div>
+
+    <div class="container" id="game-container" style="display: none;">
+        <div class="header">
+            <h1>ТАЙНА СТАРОГО ОСОБНЯКА</h1>
+            <div class="subtitle">Текстовая новелла в жанре хоррор | Версия 3.2</div>
+        </div>
+        
+        <div class="game-wrapper">
+            <div class="main-area">
+                <div class="output-area">
+                    <div id="output"></div>
+                </div>
+                
+                <div class="choices-area">
+                    <div class="choices-title">ВЫБОР ДЕЙСТВИЙ:</div>
+                    <div id="choices"></div>
+                    
+                    <div class="input-area" id="input-area" style="display: none;">
+                        <input type="text" id="player-input" placeholder="Введите текст..." maxlength="30">
+                        <button class="action-btn" id="submit-btn">Подтвердить</button>
+                    </div>
+                    
+                    <div class="input-area" id="continue-area" style="display: none;">
+                        <button class="action-btn" id="continue-btn">ПРОДОЛЖИТЬ ▶</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sidebar">
+                <div class="stats-panel">
+                    <div class="panel-title">СТАТУС ИГРОКА</div>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-header">
+                                <div class="stat-label">ИГРОК:</div>
+                                <div class="stat-value" id="player-name" title="Имя игрока">???</div>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-header">
+                                <div class="stat-label">ЗДОРОВЬЕ:</div>
+                                <div class="stat-value" id="health-value">100%</div>
+                            </div>
+                            <div class="progress-bar health-bar">
+                                <div class="progress-fill" id="health-bar" style="width: 100%"></div>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-header">
+                                <div class="stat-label">СТРАХ:</div>
+                                <div class="stat-value" id="fear-value">0%</div>
+                            </div>
+                            <div class="progress-bar fear-bar">
+                                <div class="progress-fill" id="fear-bar" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="inventory-panel">
+                    <div class="panel-title">ИНВЕНТАРЬ <span style="float:right; font-size:0.8em;" id="inventory-count">0/20</span></div>
+                    <div id="inventory-list">
+                        <div style="color:#555; font-style:italic; text-align:center; padding:20px;">
+                            Инвентарь пуст
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="location-map" id="location-map">
+                    <div class="map-title">КАРТА ОСОБНЯКА</div>
+                    <div class="map-grid" id="map-grid">
+                    </div>
+                </div>
+                
+                <div class="sidebar-buttons">
+                    <button class="action-btn" onclick="saveGame()">СОХРАНИТЬ</button>
+                    <button class="action-btn" onclick="showMenu()">МЕНЮ</button>
+                    <button class="action-btn" onclick="toggleMap()">КАРТА</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="ending-screen" class="ending-screen">
+        <div class="ending-content">
+            <div class="ending-title" id="ending-title">КОНЕЦ ИГРЫ</div>
+            <div id="ending-text" style="color:#0f0; line-height:1.6; margin-bottom:20px;"></div>
+            <div class="ending-stats" id="ending-stats"></div>
+            <div class="ending-buttons">
+                <button class="menu-btn" onclick="returnToMenu()">В ГЛАВНОЕ МЕНЮ</button>
+                <button class="menu-btn" id="continue-ending-btn" onclick="continueExploring()">ПРОДОЛЖИТЬ</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="scenes.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
