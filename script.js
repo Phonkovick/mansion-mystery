@@ -1,3 +1,4 @@
+// ============ ОБЪЯВЛЕНИЕ ПЕРЕМЕННЫХ ============
 let gameState = {
     playerName: "",
     currentScene: "askName",
@@ -7,13 +8,15 @@ let gameState = {
     visitedScenes: new Set(),
     endingsFound: [],
     steps: 0,
-
+    
+    // Флаги прогресса
     hasFlashlight: false,
     hasLibraryKey: false,
     hasCellarKey: false,
     ghostTalked: false,
     secretDoorFound: false,
-
+    
+    // Локации
     locations: {
         "комната": { visited: false, current: false },
         "коридор": { visited: false, current: false },
@@ -38,6 +41,7 @@ let currentChoices = [];
 let gameAutoSave = true;
 let endingShown = false;
 
+// ============ СИСТЕМА СОХРАНЕНИЙ ============
 function saveGame() {
     try {
         const saveData = JSON.stringify({
@@ -95,6 +99,7 @@ function loadGameFromMenu() {
     }
 }
 
+// ============ СИСТЕМА ВЫВОДА ТЕКСТА ============
 function clearOutput() {
     document.getElementById('output').innerHTML = '';
 }
@@ -147,6 +152,7 @@ function skipTyping() {
     isTyping = false;
 }
 
+// ============ СИСТЕМА ВЫБОРА ============
 function showChoices(choices) {
     const choicesDiv = document.getElementById('choices');
     choicesDiv.innerHTML = '';
@@ -199,6 +205,7 @@ function selectChoice(index) {
     }
 }
 
+// ============ ОБНОВЛЕНИЕ ИНТЕРФЕЙСА ============
 function updateStats() {
     const playerNameElement = document.getElementById('player-name');
     
@@ -219,7 +226,8 @@ function updateStats() {
     
     document.getElementById('health-bar').style.width = `${gameState.health}%`;
     document.getElementById('fear-bar').style.width = `${gameState.fear}%`;
-
+    
+    // Цвет здоровья
     const healthValue = document.getElementById('health-value');
     healthValue.className = 'stat-value';
     if (gameState.health > 70) {
@@ -229,10 +237,12 @@ function updateStats() {
     } else {
         healthValue.classList.add('text-danger');
     }
-
+    
+    // Цвет страха
     const fearValue = document.getElementById('fear-value');
     fearValue.className = 'stat-value';
     if (gameState.fear < 30) {
+        // Базовый цвет
     } else if (gameState.fear < 60) {
         fearValue.classList.add('text-warning');
     } else {
@@ -264,6 +274,7 @@ function addToInventory(item) {
         gameState.inventory.push(item);
         updateInventory();
         
+        // Обновляем флаги
         if (item === "фонарик") gameState.hasFlashlight = true;
         if (item === "ключ от библиотеки") gameState.hasLibraryKey = true;
         if (item === "ключ от подвала") gameState.hasCellarKey = true;
@@ -337,6 +348,7 @@ function toggleMap() {
     }
 }
 
+// ============ ИГРОВЫЕ УТИЛИТЫ ============
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -371,6 +383,7 @@ function decreaseHealth(amount) {
     }
 }
 
+// ============ ЗАГРУЗКА СЦЕН ============
 function loadScene(sceneName) {
     if (isTyping) {
         skipTyping();
@@ -382,7 +395,8 @@ function loadScene(sceneName) {
     
     gameState.currentScene = sceneName;
     
-    if (gameAutoSave) saveGame();
+    // НЕ сохраняем при загрузке сцены - это вызывает баг
+    // if (gameAutoSave) saveGame();
     
     if (scenes[sceneName]) {
         scenes[sceneName]();
@@ -392,6 +406,7 @@ function loadScene(sceneName) {
     }
 }
 
+// ============ СИСТЕМА КОНЦОВОК ============
 function showEnding(title, text) {
     endingShown = true;
     
@@ -438,6 +453,7 @@ function continueExploring() {
     loadScene("corridor");
 }
 
+// ============ МЕНЮ ИГРЫ ============
 function startNewGame() {
     if (localStorage.getItem('mansionMysterySave') && !confirm("Начать новую игру? Текущее сохранение будет перезаписано.")) {
         return;
@@ -522,9 +538,11 @@ function showAbout() {
     alert("ОБ ИГРЕ:\n\n'Тайна старого особняка' - текстовая новелла в жанре хоррор.\n\nВы просыпаетесь в заброшенном особняке с мрачной историей. Ваша задача - исследовать дом, раскрыть его тайны и найти выход, стараясь сохранить рассудок и жизнь.\n\nОсобенности:\n• 8 уникальных концовок\n• Динамическая система страха\n• Интерактивный инвентарь и карта\n• Рабочая система сохранений\n• Минималистичный ретро-стиль\n\nИгра создана в стиле классических текстовых приключений с элементами психологического хоррора.");
 }
 
+// ============ ИНИЦИАЛИЗАЦИЯ ============
 function init() {
     console.log("Инициализация игры...");
     
+    // Обработчик кнопки "Подтвердить" для ввода имени
     document.getElementById('submit-btn').addEventListener('click', function() {
         const input = document.getElementById('player-input');
         let value = input.value.trim();
@@ -548,12 +566,21 @@ function init() {
         }
     });
     
+    // Enter для ввода имени
     document.getElementById('player-input').addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
             document.getElementById('submit-btn').click();
         }
     });
     
+    // Кнопка "Продолжить"
+    document.getElementById('continue-btn').addEventListener('click', function() {
+        if (gameState.currentScene === "intro") {
+            loadScene("room");
+        }
+    });
+    
+    // Горячие клавиши
     document.addEventListener('keydown', function(e) {
         if (e.key >= '1' && e.key <= '9') {
             const index = parseInt(e.key) - 1;
