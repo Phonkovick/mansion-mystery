@@ -8,7 +8,7 @@
 - Выбирай действия
 
 ## 🌐 Играть тут
-https://phonkoviсk.github.io/mansion-mystery/
+[https://phonkoviсk.github.io/mansion-mystery/](https://phonkovick.github.io/mansion-mystery/)
 
 ## 🛠️ Технологии
 - HTML
