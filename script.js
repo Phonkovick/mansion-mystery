@@ -1,15 +1,13 @@
+// Modified loadScene function
 function loadScene(scene) {
-    // Check if the scene is 'askName' or 'intro', skip autosaving for these scenes
     if (scene === 'askName' || scene === 'intro') {
-        // Load the scene without autosaving 
-        // Original logic to load the scene
-        console.log('Loading scene:', scene);
-        // Additional logic for loading scenes
+        // Skip autosaving for these initial scenes
+        console.log(`Loading scene: ${scene}, autosave skipped.`);
     } else {
-        // Autosave logic can go here
+        // Existing autosaving logic here
         autosave();
-        // Load the scene
-        console.log('Loading scene:', scene);
-        // Additional logic for loading scenes
     }
+    // Load the scene logic here
 }
+
+// Other existing code...
