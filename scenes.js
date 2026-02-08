@@ -80,7 +80,7 @@ const scenes = {
     "tryWindow": async function() {
         clearOutput();
         
-        await typeText("Вы пытаетесь открыть окво, но оно заклинило.", "text-highlight");
+        await typeText("Вы пытаетесь открыть окно, но оно заклинило.", "text-highlight");
         await typeText("Не открывается.");
         
         showContinue();
