@@ -1,10 +1,23 @@
-const scenes = {
-    "askName": async function() {
-        clearOutput();
-        await typeText("Перед началом игры введите имя вашего персонажа (максимум 30 символов):");
-        showInput("Ваше имя...");
-    },
+async function loadScene(sceneName) {
+    if (isTyping) {
+        skipTyping();
+        setTimeout(() => loadScene(sceneName), 100);
+        return;
+    }
     
+    endingShown = false;
+    
+    gameState.currentScene = sceneName;
+    
+    if (gameAutoSave) saveGame();
+    
+    if (scenes[sceneName]) {
+        await scenes[sceneName]();
+    } else {
+        showMessage("Ошибка: сцена не найдена", "text-danger");
+        loadScene("corridor");
+    }
+}
     "intro": async function() {
         clearOutput();
         setCurrentLocation("комната");
