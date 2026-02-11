@@ -295,6 +295,6 @@ const scenes = {
         
         showContinue();
         document.getElementById('continue-btn').onclick = () => loadScene("entranceHall");
-    },
+    }
 
 window.scenes = scenes;
