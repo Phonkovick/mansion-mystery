@@ -1,30 +1,29 @@
 const scenes = {
+    // === НАЧАЛЬНАЯ СЦЕНА (ВВОД ИМЕНИ) ===
     "askName": async function() {
         clearOutput();
         await typeText("Добро пожаловать в 'Тайну старого особняка'.", "text-highlight");
         await typeText("Как вас зовут? (введите имя)");
         showInput("Введите ваше имя...");
     },
-    
+
+    // === ОСНОВНЫЕ СЦЕНЫ ===
     "intro": async function() {
         clearOutput();
         setCurrentLocation("комната");
-        
         await typeText(`${gameState.playerName}, вы просыпаетесь в незнакомой комнате...`, "text-highlight");
         await typeText("\nПоследнее, что помнится - вы зашли в заброшенный особняк на вечеринку.");
         await typeText("Теперь вы один, а за окном бушует гроза.");
         await typeText("Молнии на мгновение освещают интерьер комнаты.");
-        
         showContinue();
         document.getElementById('continue-btn').onclick = () => loadScene("room");
     },
-    
+
     "room": async function() {
         clearOutput();
         await typeText("Вы встаете с кровати. Комната обставлена старинной мебелью.", "text-highlight");
         await typeText("Дверь в коридор приоткрыта. Оттуда доносится скрип половиц.");
         await typeText("На столе - опрокинутая свеча, воск застыл на дереве.");
-        
         showChoices([
             { text: "Осмотреть комнату", action: "examineRoom" },
             { text: "Подойти к окну", action: "lookWindow" },
