@@ -1,23 +1,11 @@
-async function loadScene(sceneName) {
-    if (isTyping) {
-        skipTyping();
-        setTimeout(() => loadScene(sceneName), 100);
-        return;
-    }
+const scenes = {
+    "askName": async function() {
+        clearOutput();
+        await typeText("Добро пожаловать в 'Тайну старого особняка'.", "text-highlight");
+        await typeText("Как вас зовут? (введите имя)");
+        showInput("Введите ваше имя...");
+    },
     
-    endingShown = false;
-    
-    gameState.currentScene = sceneName;
-    
-    if (gameAutoSave) saveGame();
-    
-    if (scenes[sceneName]) {
-        await scenes[sceneName]();
-    } else {
-        showMessage("Ошибка: сцена не найдена", "text-danger");
-        loadScene("corridor");
-    }
-}
     "intro": async function() {
         clearOutput();
         setCurrentLocation("комната");
