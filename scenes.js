@@ -1,5 +1,4 @@
 const scenes = {
-    // === НАЧАЛЬНАЯ СЦЕНА (ВВОД ИМЕНИ) ===
     "askName": async function() {
         clearOutput();
         await typeText("Добро пожаловать в 'Тайну старого особняка'.", "text-highlight");
@@ -7,7 +6,6 @@ const scenes = {
         showInput("Введите ваше имя...");
     },
 
-    // === ОСНОВНЫЕ СЦЕНЫ ===
     "intro": async function() {
         clearOutput();
         setCurrentLocation("комната");
