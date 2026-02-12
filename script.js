@@ -1,3 +1,5 @@
+console.log('script.js загружен!');
+
     let gameState = {
     playerName: "",
     currentScene: "askName",
@@ -439,6 +441,7 @@ function continueExploring() {
 }
 
 function startNewGame() {
+    console.log('startNewGame вызвана!');
     if (localStorage.getItem('mansionMysterySave') && !confirm("Начать новую игру? Текущее сохранение будет перезаписано.")) {
         return;
     }
@@ -589,5 +592,11 @@ function init() {
     
     console.log("Инициализация завершена");
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Скрипт загружен, показываем меню');
+    document.getElementById('menu-screen').style.display = 'flex';
+    document.getElementById('game-container').style.display = 'none';
+});
 
 document.addEventListener('DOMContentLoaded', init);
