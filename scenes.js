@@ -29,189 +29,165 @@ const scenes = {
             { text: "Выйти в коридор", action: "corridor" }
         ]);
     },
-    
+
     "examineRoom": async function() {
         clearOutput();
-        
         await typeText("Вы осматриваете комнату:", "text-highlight");
         await typeText("- Кровать с балдахином, покрытая пылью");
         await typeText("- Старинный комод с выдвижными ящиками");
         await typeText("- Туалетный столик с треснувшим зеркалом");
         await typeText("- Шкаф для одежды");
         await typeText("- Камин с засохшей золой");
-        
+
         if (!gameState.hasFlashlight) {
             await typeText("\nВ одном из ящиков комода вы находите старый, но рабочий фонарик!", "text-success");
             addToInventory("фонарик");
         } else {
             await typeText("\nБольше ничего полезного здесь нет.");
         }
-        
+
         showContinue();
         document.getElementById('continue-btn').onclick = () => loadScene("room");
     },
-    
+
     "lookWindow": async function() {
         clearOutput();
-        
         await typeText("Вы подходите к окну. Стекло покрыто трещинами.", "text-highlight");
         await typeText("За окном - заброшенный сад. На подоконнике лежит пожелтевший листок.");
-        
         showChoices([
             { text: "Прочитать записку", action: "readNote" },
             { text: "Попытаться открыть окно", action: "tryWindow" },
             { text: "Вернуться", action: "room" }
         ]);
     },
-    
+
     "readNote": async function() {
         clearOutput();
         increaseFear(10);
-        
         await typeText("На листке кривым почерком написано:", "text-highlight");
         await typeText("\"Они не ушли. Они ждут. Особенно дети. Они все еще играют.\"", "text-warning");
-        
         showContinue();
         document.getElementById('continue-btn').onclick = () => loadScene("room");
     },
-    
+
     "tryWindow": async function() {
         clearOutput();
-        
         await typeText("Вы пытаетесь открыть окно, но оно заклинило.", "text-highlight");
         await typeText("Не открывается.");
-        
         showContinue();
         document.getElementById('continue-btn').onclick = () => loadScene("room");
     },
-    
+
     "checkPockets": async function() {
         clearOutput();
-        
         await typeText("Вы проверяете карманы:", "text-highlight");
         await typeText("- Мобильный телефон (нет сигнала)");
         await typeText("- Ключи от своей квартиры");
         await typeText("- Кусочек мела");
         await typeText("- Зажигалка");
-        
         addToInventory("зажигалка");
-        
         showContinue();
         document.getElementById('continue-btn').onclick = () => loadScene("room");
     },
-    
+
     "corridor": async function() {
         clearOutput();
         setCurrentLocation("коридор");
-        
         await typeText("Вы выходите в длинный темный коридор.", "text-highlight");
         await typeText("Старые обои облезли, пол скрипит под ногами.");
         await typeText("В воздухе витает запах сырости и старого дерева.");
-        
+
         if (gameState.fear > 30) {
             await typeText("\nВам кажется, что в конце коридора мелькнула тень...", "text-warning");
             increaseFear(5);
         }
-        
+
         if (!gameState.ghostTalked && chance(20)) {
             gameState.ghostTalked = true;
-            setTimeout(() => {
-                loadScene("ghostAppears");
-            }, 1500);
+            setTimeout(() => { loadScene("ghostAppears"); }, 1500);
             return;
         }
-        
+
         const choices = [
             { text: "Пойти налево (лестница)", action: "stairs" },
             { text: "Пойти направо (библиотека)", action: "libraryDoor" },
             { text: "Пойти прямо (гостиная)", action: "livingRoom" },
             { text: "Осмотреть прихожую", action: "entranceHall" }
         ];
-        
+
         if (gameState.hasCellarKey) {
             choices.push({ text: "Спуститься в подвал", action: "cellar" });
         }
-        
+
         showChoices(choices);
     },
-    
+
     "ghostAppears": async function() {
         clearOutput();
         increaseFear(30);
-        
         await typeText("Внезапно перед вами материализуется полупрозрачная фигура!", "text-danger");
         await typeText("Призрак медленно плывет в вашу сторону...", "text-warning");
-        
+
         const choices = [
             { text: "Попытаться заговорить с призраком", action: "talkGhost" },
             { text: "Бежать без оглядки", action: "runFromGhost" }
         ];
-        
+
         if (gameState.hasFlashlight) {
             choices.push({ text: "Осветить фонариком", action: "flashlightGhost" });
         }
-        
+
         showChoices(choices);
     },
-    
+
     "talkGhost": async function() {
         clearOutput();
         await typeText("Вы дрожащим голосом спрашиваете: 'Что ты хочешь?'", "text-highlight");
         await typeText("\nПризрак останавливается. Его голос звучит прямо в вашей голове:");
         await typeText("'Найди мое кольцо... в саду... под розой...'", "text-secret");
         await typeText("\nЗатем призрак исчезает.");
-        
         addToInventory("задание: найти кольцо");
-        
         showContinue();
         document.getElementById('continue-btn').onclick = () => loadScene("corridor");
     },
-    
+
     "runFromGhost": async function() {
         clearOutput();
         increaseFear(20);
-        
         await typeText("Вы разворачиваетесь и бежите без оглядки!", "text-danger");
         await typeText("Сердце колотится, в ушах звон.");
         await typeText("Спустя несколько минут, вы останавливаетесь, чтобы отдышаться.");
-        
         showContinue();
         document.getElementById('continue-btn').onclick = () => loadScene("corridor");
     },
-    
+
     "flashlightGhost": async function() {
         clearOutput();
-        
         await typeText("Вы направляете фонарик на призрака.", "text-highlight");
         await typeText("Свет проходит сквозь него, но призрак морщится и отступает.");
         await typeText("Он медленно растворяется в воздухе, оставляя после себя ледяной холод.");
-        
         showContinue();
         document.getElementById('continue-btn').onclick = () => loadScene("corridor");
     },
-    
+
     "stairs": async function() {
         clearOutput();
         setCurrentLocation("лестница");
-        
         await typeText("Вы подходите к лестнице, ведущей на второй этаж.", "text-highlight");
         await typeText("Деревянные ступени скрипят под ногами.");
         await typeText("Сверху доносится тихий шепот.");
-        
         showChoices([
             { text: "Подняться на второй этаж", action: "secondFloor" },
             { text: "Вернуться в коридор", action: "corridor" }
         ]);
     },
-    
+
     "secondFloor": async function() {
         clearOutput();
         setCurrentLocation("второй этаж");
-        
         await typeText("Вы оказываетесь на втором этаже.", "text-highlight");
         await typeText("Здесь еще темнее, чем внизу. В воздухе пахнет плесенью.");
         await typeText("Перед вами несколько дверей.");
-        
         showChoices([
             { text: "Дверь слева (детская)", action: "nursery" },
             { text: "Дверь в центре (спальня)", action: "bedroom" },
@@ -219,13 +195,11 @@ const scenes = {
             { text: "Вернуться вниз", action: "stairs" }
         ]);
     },
-    
+
     "libraryDoor": async function() {
         clearOutput();
-        
         await typeText("Вы подходите к двери в библиотеку.", "text-highlight");
         await typeText("Дверь заперта. На двери табличка: 'Библиотека'.");
-        
         if (gameState.hasLibraryKey) {
             showChoices([
                 { text: "Открыть дверь ключом", action: "library" },
@@ -233,21 +207,16 @@ const scenes = {
             ]);
         } else {
             await typeText("Кажется, нужен ключ.", "text-warning");
-            
-            showChoices([
-                { text: "Вернуться", action: "corridor" }
-            ]);
+            showChoices([{ text: "Вернуться", action: "corridor" }]);
         }
     },
-    
+
     "livingRoom": async function() {
         clearOutput();
         setCurrentLocation("гостиная");
-        
         await typeText("Вы входите в просторную гостиную.", "text-highlight");
         await typeText("Большой камин, запыленная мебель, на столе разложены карты.");
         await typeText("На каминной полке стоит фотография семьи.");
-        
         showChoices([
             { text: "Осмотреть фотографию", action: "examinePhoto" },
             { text: "Посмотреть на карты", action: "examineCards" },
@@ -255,46 +224,118 @@ const scenes = {
             { text: "Вернуться в коридор", action: "corridor" }
         ]);
     },
-    
+
     "entranceHall": async function() {
         clearOutput();
         setCurrentLocation("прихожая");
-        
         await typeText("Вы в просторной прихожей.", "text-highlight");
         await typeText("Большая дверь на улицу заперта на тяжелый замок.");
         await typeText("На вешалке висят старые пальто.");
-        
         showChoices([
             { text: "Попробовать открыть дверь", action: "tryMainDoor" },
             { text: "Осмотреть вешалку", action: "examineCoatRack" },
             { text: "Вернуться в коридор", action: "corridor" }
         ]);
     },
-    
+
     "tryMainDoor": async function() {
         clearOutput();
-        
         await typeText("Вы пытаетесь открыть главную дверь, но она не поддается.", "text-highlight");
         await typeText("Замок ржавый и заклинило. Без ключа не открыть.");
-        
         showContinue();
         document.getElementById('continue-btn').onclick = () => loadScene("entranceHall");
     },
-    
+
     "examineCoatRack": async function() {
         clearOutput();
-        
         await typeText("Вы осматриваете пальто на вешалке.", "text-highlight");
-        
         if (!gameState.hasLibraryKey && chance(50)) {
             await typeText("\nВ кармане одного из пальто вы находите ключ!", "text-success");
             addToInventory("ключ от библиотеки");
         } else {
             await typeText("\nВ карманах ничего полезного.");
         }
-        
         showContinue();
         document.getElementById('continue-btn').onclick = () => loadScene("entranceHall");
+    },
+
+    "library": async function() {
+        clearOutput();
+        setCurrentLocation("библиотека");
+        await typeText("Вы входите в библиотеку. Огромные стеллажи уходят под потолок.", "text-highlight");
+        await typeText("Здесь пахнет старыми книгами и пылью.");
+        await typeText("Библиотека ждёт своего исследователя...");
+        showContinue();
+        document.getElementById('continue-btn').onclick = () => loadScene("corridor");
+    },
+
+    "cellar": async function() {
+        clearOutput();
+        setCurrentLocation("подвал");
+        await typeText("Вы спускаетесь в холодный сырой подвал.", "text-highlight");
+        await typeText("Здесь почти ничего не видно. Тени играют со светом.");
+        await typeText("Подвал хранит много тайн...");
+        showContinue();
+        document.getElementById('continue-btn').onclick = () => loadScene("corridor");
+    },
+
+    "nursery": async function() {
+        clearOutput();
+        setCurrentLocation("детская");
+        await typeText("Вы заходите в детскую комнату.", "text-highlight");
+        await typeText("Старые игрушки разбросаны по полу. Качели медленно покачиваются.");
+        increaseFear(10);
+        showContinue();
+        document.getElementById('continue-btn').onclick = () => loadScene("secondFloor");
+    },
+
+    "bedroom": async function() {
+        clearOutput();
+        setCurrentLocation("спальня");
+        await typeText("Вы в спальне. Большая кровать с балдахином, платяной шкаф.", "text-highlight");
+        await typeText("В воздухе витает запах старых духов.");
+        showContinue();
+        document.getElementById('continue-btn').onclick = () => loadScene("secondFloor");
+    },
+
+    "bathroom": async function() {
+        clearOutput();
+        setCurrentLocation("ванная");
+        await typeText("Вы заходите в ванную. Зеркало треснуто, из крана капает вода.", "text-highlight");
+        await typeText("Капли отбивают ритм...");
+        showContinue();
+        document.getElementById('continue-btn').onclick = () => loadScene("secondFloor");
+    },
+
+    "examinePhoto": async function() {
+        clearOutput();
+        await typeText("Вы рассматриваете фотографию. На ней семья: мужчина, женщина и двое детей.", "text-highlight");
+        await typeText("Лица выглядят размытыми, словно время стерло их черты.");
+        showContinue();
+        document.getElementById('continue-btn').onclick = () => loadScene("livingRoom");
+    },
+
+    "examineCards": async function() {
+        clearOutput();
+        await typeText("На столе разложены карты Таро.", "text-highlight");
+        await typeText("Вы замечаете карту 'Башня' — она выпала отдельно.");
+        increaseFear(5);
+        showContinue();
+        document.getElementById('continue-btn').onclick = () => loadScene("livingRoom");
+    },
+
+    "examineFireplace": async function() {
+        clearOutput();
+        await typeText("Вы осматриваете камин. В золе что-то блестит.", "text-highlight");
+        if (!gameState.hasCellarKey) {
+            await typeText("Это ключ от подвала!", "text-success");
+            addToInventory("ключ от подвала");
+        } else {
+            await typeText("Больше ничего нет.");
+        }
+        showContinue();
+        document.getElementById('continue-btn').onclick = () => loadScene("livingRoom");
     }
+};
 
 window.scenes = scenes;
