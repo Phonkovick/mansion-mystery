@@ -40,6 +40,14 @@ let currentChoices = [];
 let gameAutoSave = false;
 let endingShown = false;
 
+function quickLoad() {
+    if (loadGame()) {
+        document.getElementById('menu-screen').style.display = 'none';
+        document.getElementById('game-container').style.display = 'block';
+        loadScene(gameState.currentScene);
+    }
+}
+
 function saveGame() {
     try {
         const saveData = JSON.stringify({
