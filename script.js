@@ -40,13 +40,24 @@ let currentChoices = [];
 let gameAutoSave = false;
 let endingShown = false;
 
-function quickLoad() {
-    if (loadGame()) {
-        document.getElementById('menu-screen').style.display = 'none';
-        document.getElementById('game-container').style.display = 'block';
-        loadScene(gameState.currentScene);
-    }
-}
+(function injectButtonStyles() {
+    const style = document.createElement('style');
+    style.textContent = `
+        .choice-btn:disabled {
+            opacity: 0.6;
+            filter: brightness(0.7);
+            text-decoration: line-through;
+            cursor: not-allowed;
+            pointer-events: none;
+            background: #3a3a3a !important;
+            color: #888 !important;
+            border-color: #555 !important;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+    `;
+    document.head.appendChild(style);
+})();
 
 function saveGame() {
     try {
@@ -159,7 +170,14 @@ function showChoices(choices) {
         button.className = 'choice-btn slide-in';
         button.style.animationDelay = `${index * 0.1}s`;
         button.textContent = `${index + 1}. ${choice.text}`;
-        button.onclick = () => selectChoice(index);
+        
+        button.onclick = function(e) {
+            e.preventDefault();
+            if (button.disabled) return;
+            button.disabled = true;
+            selectChoice(index);
+        };
+        
         choicesDiv.appendChild(button);
     });
 
@@ -529,7 +547,7 @@ function init() {
         if (e.key >= '1' && e.key <= '9') {
             const index = parseInt(e.key) - 1;
             const buttons = document.getElementById('choices').getElementsByClassName('choice-btn');
-            if (index < buttons.length && buttons[index]) {
+            if (index < buttons.length && buttons[index] && !buttons[index].disabled) {
                 buttons[index].click();
             }
         }
