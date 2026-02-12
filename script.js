@@ -170,14 +170,23 @@ function showChoices(choices) {
         button.className = 'choice-btn slide-in';
         button.style.animationDelay = `${index * 0.1}s`;
         button.textContent = `${index + 1}. ${choice.text}`;
-        
+
         button.onclick = function(e) {
             e.preventDefault();
-            if (button.disabled) return;
-            button.disabled = true;
-            selectChoice(index);
+
+            if (isTyping) {
+                showMessage("⏳ Текст ещё выводится, подождите...", "text-warning");
+                return;
+            }
+
+            if (typeof choice.action === 'string') {
+                selectChoice(index);
+            } else {
+                button.disabled = true;
+                selectChoice(index);
+            }
         };
-        
+
         choicesDiv.appendChild(button);
     });
 
@@ -200,11 +209,6 @@ function showContinue() {
 }
 
 function selectChoice(index) {
-    if (isTyping) {
-        skipTyping();
-        return;
-    }
-
     if (index >= 0 && index < currentChoices.length) {
         const choice = currentChoices[index];
         showMessage(`> ${choice.text}`, 'text-highlight');
@@ -548,6 +552,10 @@ function init() {
             const index = parseInt(e.key) - 1;
             const buttons = document.getElementById('choices').getElementsByClassName('choice-btn');
             if (index < buttons.length && buttons[index] && !buttons[index].disabled) {
+                if (isTyping) {
+                    showMessage("⏳ Текст ещё выводится, подождите...", "text-warning");
+                    return;
+                }
                 buttons[index].click();
             }
         }
