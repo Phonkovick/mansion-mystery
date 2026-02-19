@@ -10,11 +10,6 @@
 ## 🌐 Играть тут
 [https://phonkoviсk.github.io/mansion-mystery/](https://phonkovick.github.io/mansion-mystery/)
 
-## 🛠️ Технологии
-- HTML
-- CSS
-- JavaScript
-
 ## 📦 Структура проекта
 - `index.html` — основа игры  
 - `script.js` — логика  
