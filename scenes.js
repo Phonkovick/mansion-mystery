@@ -112,7 +112,8 @@ const scenes = {
             { text: "Пойти налево (лестница)", action: "stairs" },
             { text: "Пойти направо (библиотека)", action: "libraryDoor" },
             { text: "Пойти прямо (гостиная)", action: "livingRoom" },
-            { text: "Осмотреть прихожую", action: "entranceHall" }
+            { text: "Осмотреть прихожую", action: "entranceHall" },
+			{ text: "Зайти на кухню", action: "kitchen" }
         ];
 
         if (gameState.hasCellarKey) {
@@ -335,7 +336,51 @@ const scenes = {
         }
         showContinue();
         document.getElementById('continue-btn').onclick = () => loadScene("livingRoom");
+    },
+	
+	"kitchen": async function() {
+    clearOutput();
+    setCurrentLocation("кухня");
+
+    await typeText("Вы осторожно входите на кухню.", "text-highlight");
+    await typeText("Воздух пахнет чем-то протухшим.");
+    await typeText("На полу валяются разбитые тарелки.");
+    await typeText("Холодильник тихо гудит, хотя электричества в доме быть не должно.");
+
+    showChoices([
+        { text: "Открыть холодильник", action: "fridge" },
+        { text: "Осмотреть стол", action: "kitchenTable" },
+        { text: "Вернуться в коридор", action: "corridor" }
+    ]);
+},
+
+"fridge": async function() {
+    clearOutput();
+
+    increaseFear(10);
+
+    await typeText("Вы медленно открываете холодильник...", "text-highlight");
+    await typeText("Внутри пусто.");
+    await typeText("Но дверца сама начинает медленно закрываться.");
+
+    showContinue();
+    document.getElementById("continue-btn").onclick = () => loadScene("kitchen");
+},
+
+"kitchenTable": async function() {
+    clearOutput();
+
+    await typeText("На столе лежит старый кухонный нож.", "text-highlight");
+
+    if (!gameState.inventory.includes("кухонный нож")) {
+        addToInventory("кухонный нож");
+    } else {
+        await typeText("Больше здесь ничего нет.");
     }
+
+    showContinue();
+    document.getElementById("continue-btn").onclick = () => loadScene("kitchen");
+},
 };
 
 window.scenes = scenes;

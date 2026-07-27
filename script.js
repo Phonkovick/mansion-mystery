@@ -22,6 +22,7 @@ let gameState = {
         "прихожая": { visited: false, current: false },
         "библиотека": { visited: false, current: false },
         "гостиная": { visited: false, current: false },
+		"кухня": { visited: false, current: false },
         "лестница": { visited: false, current: false },
         "второй этаж": { visited: false, current: false },
         "детская": { visited: false, current: false },
@@ -294,6 +295,7 @@ function updateMap() {
         { id: "прихожая", name: "ПРИХ." },
         { id: "библиотека", name: "БИБЛ." },
         { id: "гостиная", name: "ГОСТ." },
+		{ id: "кухня", name: "КУХ." },
         { id: "лестница", name: "ЛЕСТ." },
         { id: "второй этаж", name: "2 ЭТ." },
         { id: "детская", name: "ДЕТ." },
@@ -302,7 +304,7 @@ function updateMap() {
         { id: "чердак", name: "ЧЕРД." },
         { id: "подвал", name: "ПОДВ." },
         { id: "сад", name: "САД" },
-        { id: "тайная комната", name: "ТАЙН." }
+        { id: "тайная комната", name: "ТАЙН К." }
     ];
 
     locations.forEach(loc => {
