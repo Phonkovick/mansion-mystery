@@ -63,7 +63,7 @@ const scenes = {
 
     "readNote": async function() {
         clearOutput();
-        increaseFear(10);
+        if (triggerEventOnce("noteRead")) increaseFear(10);
         await typeText("На листке кривым почерком написано:", "text-highlight");
         await typeText("\"Они не ушли. Они ждут. Особенно дети. Они все еще играют.\"", "text-warning");
         showContinue();
@@ -97,7 +97,7 @@ const scenes = {
         await typeText("Старые обои облезли, пол скрипит под ногами.");
         await typeText("В воздухе витает запах сырости и старого дерева.");
 
-        if (gameState.fear > 30) {
+        if (gameState.fear > 30 && triggerEventOnce("corridorShadow")) {
             await typeText("\nВам кажется, что в конце коридора мелькнула тень...", "text-warning");
             increaseFear(5);
         }
@@ -125,7 +125,7 @@ const scenes = {
 
     "ghostAppears": async function() {
         clearOutput();
-        increaseFear(30);
+        if (triggerEventOnce("ghostEncounter")) increaseFear(30);
         await typeText("Внезапно перед вами материализуется полупрозрачная фигура!", "text-danger");
         await typeText("Призрак медленно плывет в вашу сторону...", "text-warning");
 
@@ -154,7 +154,7 @@ const scenes = {
 
     "runFromGhost": async function() {
         clearOutput();
-        increaseFear(20);
+        if (triggerEventOnce("fledFromGhost")) increaseFear(20);
         await typeText("Вы разворачиваетесь и бежите без оглядки!", "text-danger");
         await typeText("Сердце колотится, в ушах звон.");
         await typeText("Спустя несколько минут, вы останавливаетесь, чтобы отдышаться.");
@@ -285,7 +285,7 @@ const scenes = {
         setCurrentLocation("детская");
         await typeText("Вы заходите в детскую комнату.", "text-highlight");
         await typeText("Старые игрушки разбросаны по полу. Качели медленно покачиваются.");
-        increaseFear(10);
+        if (triggerEventOnce("nurseryScare")) increaseFear(10);
         showContinue();
         document.getElementById('continue-btn').onclick = () => loadScene("secondFloor");
     },
@@ -320,7 +320,7 @@ const scenes = {
         clearOutput();
         await typeText("На столе разложены карты Таро.", "text-highlight");
         await typeText("Вы замечаете карту 'Башня' — она выпала отдельно.");
-        increaseFear(5);
+        if (triggerEventOnce("tarotScare")) increaseFear(5);
         showContinue();
         document.getElementById('continue-btn').onclick = () => loadScene("livingRoom");
     },
@@ -357,7 +357,7 @@ const scenes = {
 "fridge": async function() {
     clearOutput();
 
-    increaseFear(10);
+    if (triggerEventOnce("fridgeScare")) increaseFear(10);
 
     await typeText("Вы медленно открываете холодильник...", "text-highlight");
     await typeText("Внутри пусто.");
