@@ -81,7 +81,17 @@ function loadGame() {
         const saveData = localStorage.getItem('mansionMysterySave');
         if (saveData) {
             const loaded = JSON.parse(saveData);
-            loaded.visitedScenes = new Set(loaded.visitedScenes);
+            loaded.visitedScenes = new Set(loaded.visitedScenes || []);
+
+            // Добавляем новые комнаты в старые сохранения без сброса прогресса.
+            loaded.locations = loaded.locations || {};
+            Object.keys(gameState.locations).forEach(location => {
+                loaded.locations[location] = {
+                    visited: false,
+                    current: false,
+                    ...(loaded.locations[location] || {})
+                };
+            });
             if (!loaded.steps) loaded.steps = 0;
             gameState = loaded;
             updateStats();
@@ -455,6 +465,7 @@ function startNewGame() {
             "прихожая": { visited: false, current: false },
             "библиотека": { visited: false, current: false },
             "гостиная": { visited: false, current: false },
+            "кухня": { visited: false, current: false },
             "лестница": { visited: false, current: false },
             "второй этаж": { visited: false, current: false },
             "детская": { visited: false, current: false },
