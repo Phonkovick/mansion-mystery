@@ -16,6 +16,16 @@ let gameState = {
     ghostTalked: false,
     secretDoorFound: false,
 
+    events: {
+        noteRead: false,
+        corridorShadow: false,
+        ghostEncounter: false,
+        fledFromGhost: false,
+        nurseryScare: false,
+        tarotScare: false,
+        fridgeScare: false
+    },
+
     locations: {
         "комната": { visited: false, current: false },
         "коридор": { visited: false, current: false },
@@ -82,6 +92,7 @@ function loadGame() {
         if (saveData) {
             const loaded = JSON.parse(saveData);
             loaded.visitedScenes = new Set(loaded.visitedScenes || []);
+            loaded.events = { ...gameState.events, ...(loaded.events || {}) };
 
             // Добавляем новые комнаты в старые сохранения без сброса прогресса.
             loaded.locations = loaded.locations || {};
@@ -361,6 +372,13 @@ function chance(percent) {
     return Math.random() * 100 < percent;
 }
 
+// Возвращает true только при первом срабатывании события в текущем прохождении.
+function triggerEventOnce(eventName) {
+    if (gameState.events[eventName]) return false;
+    gameState.events[eventName] = true;
+    return true;
+}
+
 function increaseFear(amount) {
     if (endingShown) return;
     gameState.fear = Math.min(100, gameState.fear + amount);
@@ -459,6 +477,15 @@ function startNewGame() {
         hasCellarKey: false,
         ghostTalked: false,
         secretDoorFound: false,
+        events: {
+            noteRead: false,
+            corridorShadow: false,
+            ghostEncounter: false,
+            fledFromGhost: false,
+            nurseryScare: false,
+            tarotScare: false,
+            fridgeScare: false
+        },
         locations: {
             "комната": { visited: false, current: false },
             "коридор": { visited: false, current: false },
